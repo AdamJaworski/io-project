@@ -15,7 +15,7 @@ class SpeachToText:
         self.r = sr.Recognizer()
 
         self.CHUNK_SIZE:  int = int(8192)
-        self.SAMPLE_RATE: int = int(44100)
+        self.SAMPLE_RATE: int = int(16000) # DO NOT CHANGE THAT!
 
         self.output_device = None
         self.input_device = None

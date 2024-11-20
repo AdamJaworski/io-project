@@ -102,23 +102,25 @@ def process_recorded_tracks(report_id: str) -> list:
     aud1 = aud1.set_frame_rate(speach_to_text.SAMPLE_RATE)
     aud2 = aud2.set_frame_rate(speach_to_text.SAMPLE_RATE)
 
-    aud1 = aud1.set_channels(2)
-    aud2 = aud2.set_channels(2)
+    aud1 = aud1.set_channels(1)
+    aud2 = aud2.set_channels(1)
 
     aud1 = aud1.apply_gain(-aud1.max_dBFS) if aud1.max_dBFS > -35 else aud1
     aud2 = aud2.apply_gain(-aud2.max_dBFS) if aud2.max_dBFS > -35 else aud2
 
     aud_out = aud1.overlay(aud2)
-    chunks = split_on_silence(aud_out, min_silence_len=400, silence_thresh=aud_out.max_dBFS - 20, keep_silence=100)
-    return chunks if len(chunks) > 0 else aud_out
+
+    chunks = split_on_silence(aud2, min_silence_len=800, silence_thresh=aud_out.max_dBFS - 30, keep_silence=400)
+    return chunks if len(chunks) > 1 else [aud_out]
 
 def audio_to_test(audio_data: pydub.AudioSegment):
     try:
-        out = r.recognize_google(sr.AudioData(audio_data.raw_data, speach_to_text.SAMPLE_RATE, sample_width=pyaudio.get_sample_size(pyaudio.paInt16)), language='pl-PL')
-        play(audio_data)
+        text = r.recognize_google(sr.AudioData(audio_data.raw_data, speach_to_text.SAMPLE_RATE, audio_data.frame_width), language='pl-PL')
+        #play(audio_data)
     except Exception as e:
-        return ''
-    return out
+        print('error')
+        return ' '
+    return text
 
 def get_entire_recording_transcript(report_id: str):
     chunks = process_recorded_tracks(report_id)
@@ -127,26 +129,12 @@ def get_entire_recording_transcript(report_id: str):
     for chunk in chunks:
         text.append(audio_to_test(chunk))
 
-    print(text)
+    print(' '.join(text))
 
-# def recognize_vosk(self, audio_data, language='en'):
-#     from vosk import KaldiRecognizer, Model
-#
-#     assert isinstance(audio_data, AudioData), "Data must be audio data"
-#
-#     if not hasattr(self, 'vosk_model'):
-#         self.vosk_model = Model(str(PathManager().model_vosk / language))
-#
-#     rec = KaldiRecognizer(self.vosk_model, 16000)
-#
-#     rec.AcceptWaveform(audio_data.get_raw_data(convert_rate=16000, convert_width=2))
-#     finalRecognition = rec.FinalResult()
-#
-#     return finalRecognition
 
 if __name__ == "__main__":
-    start_recording('test')
-    threading.Thread(target=play_zero).start()
-    time.sleep(5)
-    stop_recording()
+    # start_recording('test')
+    # threading.Thread(target=play_zero).start()
+    # time.sleep(20)
+    # stop_recording()
     get_entire_recording_transcript('test')
