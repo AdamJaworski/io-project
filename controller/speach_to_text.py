@@ -9,7 +9,6 @@ import pydub
 import sounddevice as sd
 import numpy as np
 import speech_recognition as sr
-import json
 from pydub.playback import play
 
 speach_to_text = SpeachToText()
@@ -18,12 +17,11 @@ r = sr.Recognizer()
 input_wav  = None
 output_wav = None
 
-
-def input_callback(in_data, frame_count, time_info, status):
+def input_callback(in_data, *args):
     input_wav.writeframes(in_data)
     return in_data, pyaudio.paContinue
 
-def output_callback(in_data, frame_count, time_info, status):
+def output_callback(in_data, *args):
     output_wav.writeframes(in_data)
     return in_data, pyaudio.paContinue
 
@@ -117,24 +115,28 @@ def audio_to_test(audio_data: pydub.AudioSegment):
     try:
         text = r.recognize_google(sr.AudioData(audio_data.raw_data, speach_to_text.SAMPLE_RATE, audio_data.frame_width), language='pl-PL')
         #play(audio_data)
-    except Exception as e:
+    except:
         print('error')
         return ' '
     return text
 
 def get_entire_recording_transcript(report_id: str):
     chunks = process_recorded_tracks(report_id)
-    print(len(chunks))
     text = []
     for chunk in chunks:
         text.append(audio_to_test(chunk))
 
+    print('Transkrypt:')
     print(' '.join(text))
+    return ' '.join(text)
 
 
 if __name__ == "__main__":
-    # start_recording('test')
-    # threading.Thread(target=play_zero).start()
-    # time.sleep(20)
-    # stop_recording()
-    get_entire_recording_transcript('test')
+    start_recording('test')
+    threading.Thread(target=play_zero).start()
+    print("Starting recording")
+    time.sleep(180)
+    stop_recording()
+    text = get_entire_recording_transcript('test')
+    from controller.summary import get_meeting_text_shortcut
+    get_meeting_text_shortcut(text)

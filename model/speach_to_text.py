@@ -24,7 +24,7 @@ class SpeachToText:
         self.input_stream    = None
 
         self.select_devices()
-
+    
     def select_devices(self):
         try:
             wasapi_info = self.p.get_host_api_info_by_type(pyaudio.paWASAPI)
@@ -42,7 +42,9 @@ class SpeachToText:
         self.input_device  = self.p.get_default_input_device_info()
         self.output_device = default_speakers
 
-        print(self.input_device, self.output_device)
+
+        if __name__ == "__main__":
+            print(self.input_device, self.output_device)
 
 
 if __name__ == "__main__":

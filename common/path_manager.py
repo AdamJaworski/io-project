@@ -8,7 +8,7 @@ class PathManager:
         while str(self.main_catalog).split('\\')[-1] != 'io-project':
             self.main_catalog = self.main_catalog.parent.resolve()
 
-        self.model_vosk   = self.main_catalog / 'model_vosk'
+        self.model_llama  = self.main_catalog / 'llama'
         self.outputs      = self.main_catalog / 'outputs'
         self.report_path  = None
         self.create_dirs()
