@@ -14,6 +14,7 @@ TEXT_FOOTER = 70
 def generate_report(report_model: Report):
     # Header
     report_model.setTitle('Raport')
+
     report_model.setFont(FONT_BOLD, HEADER_SIZE)
     header = report_model.header if report_model.header else 'Raport Spotkania'
     report_model.drawCentredString(300, 750, header)
@@ -22,51 +23,65 @@ def generate_report(report_model: Report):
 
     # Transcript
     text = report_model.beginText(40, 680)
-    text.textLine('Transkrypt:')
-    text.setFont(FONT, FONT_SIZE)
-    text.setLeading(LEADING)
+    report_model.bookmarkPage("Transkrypt")
+    report_model.addOutlineEntry("Transkrypt", "Transkrypt", level=0)
+    text.textLine("Transkrypt:")
     transcript_lines = convert_text_to_lines(text_to_array(report_model.transcript))
 
-    current_y = 660
-    for line in transcript_lines:
-        text.textLine(justification(line))
+    write_lines_to_report(report_model, transcript_lines, text, 660)
+
+
+    # Summary
+    set_new_page(report_model, 'main')
+    report_model.bookmarkPage("Streszczenie")
+    report_model.addOutlineEntry("Streszczenie", "Streszczenie", level=0)
+    text = report_model.beginText(40, 680)
+    text.textLine('Streszczenie:')
+
+    summary_lines = convert_text_to_lines(text_to_array(report_model.summary))
+    write_lines_to_report(report_model, summary_lines, text, 660)
+
+    report_model.save()
+
+def set_new_page(report_model: Report, page_type: Optional[str] = 'text'):
+    report_model.showPage()
+
+    if page_type=='text':
+        report_model.line(30, 770, 550, 770)
+        report_model.line(30, 50, 550, 50)
+
+    if page_type=='main':
+        report_model.setFont(FONT_BOLD, HEADER_SIZE)
+        header = report_model.header if report_model.header else 'Raport Spotkania'
+        report_model.drawCentredString(300, 750, header)
+        report_model.line(30, 710, 550, 710)
+        report_model.line(30, 50, 550, 50)
+
+def write_lines_to_report(report_model, lines_to_write, current_text_instance, starting_y):
+    current_text_instance.setFont(FONT, FONT_SIZE)
+    current_text_instance.setLeading(LEADING)
+
+    current_y = starting_y
+    for line in lines_to_write:
+        current_text_instance.textLine(justification(line))
         current_y -= LEADING
         if current_y < TEXT_FOOTER:
             # save text
-            report_model.drawText(text)
+            report_model.drawText(current_text_instance)
 
             # Create new page
             set_new_page(report_model)
 
             # set new text
             text_start = 750
-            text = report_model.beginText(40, text_start)
-            text.setFont(FONT, FONT_SIZE)
-            text.setLeading(LEADING)
+            current_text_instance = report_model.beginText(40, text_start)
+            current_text_instance.setFont(FONT, FONT_SIZE)
+            current_text_instance.setLeading(LEADING)
 
             # Reset Y
             current_y = text_start
 
-    # Summary
-    text.textLine(' ')
-    text.textLine(' ')
-    text.setFont(FONT_BOLD, HEADER_SIZE)
-    text.textLine('Streszczenie:')
-    text.setFont(FONT, FONT_SIZE)
-
-    summary_lines = convert_text_to_lines(text_to_array(report_model.summary))
-    for line in summary_lines:
-        text.textLine(justification(line))
-
-    report_model.drawText(text)
-    report_model.save()
-
-def set_new_page(report_model: Report, page_type: Optional[str] = None):
-    report_model.showPage()
-    if not page_type:
-        report_model.line(30, 770, 550, 770)
-        report_model.line(30, 50, 550, 50)
-
+    report_model.drawText(current_text_instance)
 
 def text_to_array(text: str):
     parts = text.split('\n')
