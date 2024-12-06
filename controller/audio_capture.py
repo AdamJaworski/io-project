@@ -52,12 +52,13 @@ def stop_streams():
 
 def open_wav_files(report_id: str):
     global input_wav, output_wav
-    input_wav = wave.open(str(PathManager().get_report_path(report_id) / 'input.wav'), 'wb')
+    path_manager = PathManager(report_id)
+    input_wav = wave.open(str(path_manager.get_report_path() / 'input.wav'), 'wb')
     input_wav.setnchannels(2)
     input_wav.setsampwidth(pyaudio.get_sample_size(pyaudio.paInt16))
     input_wav.setframerate(int(audio_capture.input_device["defaultSampleRate"]))
 
-    output_wav = wave.open(str(PathManager().get_report_path(report_id) / 'output.wav'), 'wb')
+    output_wav = wave.open(str(path_manager.get_report_path() / 'output.wav'), 'wb')
     output_wav.setnchannels(2)
     output_wav.setsampwidth(pyaudio.get_sample_size(pyaudio.paInt16))
     output_wav.setframerate(int(audio_capture.output_device["defaultSampleRate"]))

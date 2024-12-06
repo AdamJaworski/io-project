@@ -6,8 +6,9 @@ from model.speach_to_text import r, SAMPLE_RATE
 
 
 def process_recorded_tracks(report_id: str) -> list:
-    aud1 = pydub.AudioSegment.from_file(str(PathManager().get_report_path(report_id) / 'output.wav'), format='wav')
-    aud2 = pydub.AudioSegment.from_file(str(PathManager().get_report_path(report_id) / 'input.wav'), format='wav')
+    path_manager = PathManager(report_id)
+    aud1 = pydub.AudioSegment.from_file(str(path_manager.get_report_path() / 'output.wav'), format='wav')
+    aud2 = pydub.AudioSegment.from_file(str(path_manager.get_report_path() / 'input.wav'), format='wav')
 
     aud1 = aud1.set_frame_rate(SAMPLE_RATE)
     aud2 = aud2.set_frame_rate(SAMPLE_RATE)
