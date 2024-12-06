@@ -26,7 +26,6 @@ def output_callback(in_data, *args):
     return in_data, pyaudio.paContinue
 
 def start_streams():
-    stop_streams()
     speach_to_text.output_stream = speach_to_text.p.open(
         format=pyaudio.paInt16,
         channels=speach_to_text.output_device["maxInputChannels"],
@@ -106,37 +105,42 @@ def process_recorded_tracks(report_id: str) -> list:
     aud1 = aud1.apply_gain(-aud1.max_dBFS) if aud1.max_dBFS > -35 else aud1
     aud2 = aud2.apply_gain(-aud2.max_dBFS) if aud2.max_dBFS > -35 else aud2
 
-    aud_out = aud1.overlay(aud2)
+    aud_out = aud2.overlay(aud1) if aud2.max_dBFS > aud1.max_dBFS else aud1.overlay(aud2)
 
-    chunks = split_on_silence(aud2, min_silence_len=800, silence_thresh=aud_out.max_dBFS - 30, keep_silence=400)
+    chunks = split_on_silence(aud_out, min_silence_len=800, silence_thresh=aud_out.max_dBFS - 30, keep_silence=400)
+
     return chunks if len(chunks) > 1 else [aud_out]
 
-def audio_to_test(audio_data: pydub.AudioSegment):
+def audio_to_text(audio_data: pydub.AudioSegment):
     try:
         text = r.recognize_google(sr.AudioData(audio_data.raw_data, speach_to_text.SAMPLE_RATE, audio_data.frame_width), language='pl-PL')
-        #play(audio_data)
     except:
         print('error')
         return ' '
+    # finally:
+    #     print('playing chunk')
+    #     play(audio_data)
     return text
 
 def get_entire_recording_transcript(report_id: str):
     chunks = process_recorded_tracks(report_id)
     text = []
     for chunk in chunks:
-        text.append(audio_to_test(chunk))
+        text.append(audio_to_text(chunk))
 
-    print('Transkrypt:')
-    print(' '.join(text))
     return ' '.join(text)
 
 
 if __name__ == "__main__":
     start_recording('test')
     threading.Thread(target=play_zero).start()
-    print("Starting recording")
-    time.sleep(180)
-    stop_recording()
+    try:
+        while True:
+            time.sleep(1)
+    except KeyboardInterrupt:
+        print("Stopping recording")
+        stop_recording()
     text = get_entire_recording_transcript('test')
-    from controller.summary import get_meeting_text_shortcut
-    get_meeting_text_shortcut(text)
+    from controller.summary import get_meeting_text_shortcut, get_text_from_response
+    response = get_meeting_text_shortcut(text)
+    print(get_text_from_response(response))
