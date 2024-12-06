@@ -28,7 +28,8 @@ class Report(Canvas):
         assert transcript, "Transcript Required"
 
         self.paths = PathManager(report_id)
-        self.summary = get_text_from_response(get_meeting_shortcut(transcript)) if not summary else summary
+        #self.summary = get_text_from_response(get_meeting_shortcut(transcript)) if not summary else summary
+        self.summary = ''
         self.transcript = transcript
 
         self.header = header
