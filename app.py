@@ -1,6 +1,6 @@
 import customtkinter as ctk
 import tkinter as tk
-from view.speach_to_text import RecordingButton
+from view.audio_capture import RecordingButton
 
 
 class App(ctk.CTk):

@@ -1,5 +1,5 @@
 import customtkinter as ctk
-from controller.speach_to_text import start_recording, stop_recording, get_entire_recording_transcript
+from controller.audio_capture import start_recording, stop_recording
 from uuid import uuid1
 
 
@@ -35,8 +35,6 @@ class RecordingButton(ctk.CTkButton):
 
         else:
             stop_recording()
-            transcript = get_entire_recording_transcript(self.current_report_id)
-            print(transcript)
             self.configure(text='Start recording')
             self.current_timer = -0.1
 
