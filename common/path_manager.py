@@ -11,6 +11,7 @@ class PathManager:
             self.main_catalog = self.main_catalog.parent.resolve()
 
         self.model_llama  = self.main_catalog / 'llama'
+        self.fonts        = self.main_catalog / 'fonts'
         self.outputs      = self.main_catalog / 'outputs'
         self.report_path  = None
         self.create_dirs()

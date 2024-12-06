@@ -1,17 +1,18 @@
+import os
 from datetime import  datetime
 from typing import Optional, List
 from controller.summary import get_meeting_shortcut, get_text_from_response
 from common.path_manager import PathManager
 from reportlab.pdfgen.canvas import Canvas
-from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfbase import pdfmetrics
-from reportlab.lib import colors
+from reportlab.pdfbase.ttfonts import TTFont
 
 
 class Report(Canvas):
     def __init__(self,
                  report_id: str,
-                 report_name: Optional[str] = datetime.now().strftime('%d-%m-%Y %H:%M'),
+                 report_name: Optional[str] = datetime.now().strftime('%d-%m-%Y %H_%M'),
+                 header: Optional[str] = None,
                  transcript: str = None,
                  summary: Optional[str] = None,
                  screenshots: Optional[List[str]] = None,
@@ -24,13 +25,17 @@ class Report(Canvas):
         :param screenshots: List of file names in report id location. If not provided list is empty
         """
 
-        super().__init__(report_name, **kwds)
-
-        assert not transcript, "Transcript Required"
+        assert transcript, "Transcript Required"
 
         self.paths = PathManager(report_id)
         self.summary = get_text_from_response(get_meeting_shortcut(transcript)) if not summary else summary
         self.transcript = transcript
 
+        self.header = header
         self.screenshots = screenshots if screenshots else []
 
+        for font in os.listdir(self.paths.fonts):
+            pdfmetrics.registerFont(TTFont(font.split('.')[0], str(self.paths.fonts / font)))
+
+
+        super().__init__(str(self.paths.get_report_path() / f'{report_name}.pdf'), **kwds)
