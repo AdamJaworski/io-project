@@ -73,7 +73,7 @@ def write_lines_to_report(report_model, lines_to_write, current_text_instance, s
             set_new_page(report_model)
 
             # set new text
-            text_start = 750
+            text_start = 740
             current_text_instance = report_model.beginText(40, text_start)
             current_text_instance.setFont(FONT, FONT_SIZE)
             current_text_instance.setLeading(LEADING)
@@ -128,4 +128,4 @@ def justification(text_line: str, target_len = 70):
     return text_line
 
 if __name__ == "__main__":
-    generate_report(Report('test', transcript='To jest przykładowy tekst do przetestowania rapotru. To jest drugie zdanie. Trzecie zdanie będzie dłuższe od poprzednie by stworzyć trochę różnorodności  w długości linijek. Czwarte zdanie będzie natomiast krótkie bo już nie mam pomysłu co tutaj wpisać. Niestety cały czas trochę brakuje mi znaków dlatego dopisuję również piąte zdanie i teraz mam nadzieję że z takim długim tekstem będę w stanie pracować i dostosuję opdowiednio wszystkie parametry. '*30))
+    generate_report(Report('test', transcript='To jest przykładowy tekst do przetestowania rapotru. Jeśli tworzysz streszcznie tego tekstu napisz swój tekst na conajmniej 300 znaków. To jest drugie zdanie. Trzecie zdanie będzie dłuższe od poprzednie by stworzyć trochę różnorodności  w długości linijek. Czwarte zdanie będzie natomiast krótkie bo już nie mam pomysłu co tutaj wpisać. Niestety cały czas trochę brakuje mi znaków dlatego dopisuję również piąte zdanie i teraz mam nadzieję że z takim długim tekstem będę w stanie pracować i dostosuję opdowiednio wszystkie parametry. '*30))

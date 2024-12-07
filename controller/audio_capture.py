@@ -1,3 +1,4 @@
+import threading
 import wave
 import pyaudiowpatch as pyaudio
 import sounddevice as sd
@@ -70,12 +71,13 @@ def close_wav_files():
 def start_recording(report_id: str):
     open_wav_files(report_id)
     start_streams()
+    threading.Thread(target=play_zero).start()
 
 def play_zero():
     try:
         while audio_capture.output_stream.is_active():
             t = np.linspace(0, 0.1, int(44100 * 0.1), endpoint=False)
-            sine_wave = (0.5 * np.sin(2 * np.pi * 440 * t) * 32767 * 0.0001).astype(np.int16)
+            sine_wave = (np.sin(2 * np.pi * 440 * t)).astype(np.int16)
             sd.play(sine_wave)
             sd.wait()
     except OSError:
