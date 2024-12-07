@@ -4,7 +4,7 @@ from common import variables
 
 class RecordingButton(ctk.CTkButton):
     def __init__(self, parent):
-        super().__init__(parent, width=int(parent.x_width / 4), text='Start Recording\n(Double click)')
+        super().__init__(parent, width=int(parent.x_width / 4) - 5, text='Start Recording\n(Double click)')
 
         self.parent = parent
         self.recoding = False
@@ -13,8 +13,6 @@ class RecordingButton(ctk.CTkButton):
         self.current_report_id = None
 
         self.current_timer = -0.1
-        self.pack(side='left', fill='y', padx=5)
-
 
         self.bind('<Enter>', self.__change_hover)
         self.bind('<Leave>', self.__change_hover)

@@ -2,6 +2,7 @@ import customtkinter as ctk
 import tkinter as tk
 from view.audio_capture import RecordingButton
 from view.new_meeting import NewMeeting
+from view.generate_report import GenerateReport
 from common import variables
 
 class App(ctk.CTk):
@@ -20,18 +21,20 @@ class App(ctk.CTk):
         #self.protocol("WM_DELETE_WINDOW", self.disable_event)
         self.resizable(False, False)
 
-        self.label = ctk.CTkLabel(self, height=int(self.y_height/10), text=variables.report_id)
-        self.label.pack(fill='x')
-        self.meeting = tk.StringVar(self.label)
-        self.meeting.trace_add('write', self.update_meeting)
+        self.display = ctk.CTkLabel(self, height=int(self.y_height / 10), text=variables.report_id)
+        self.display.pack(fill='x')
+        variables.display = tk.StringVar()
 
-        NewMeeting(self)
-        self.recording = RecordingButton(self)
+        new_meeting     = NewMeeting(self)
+        record_button   = RecordingButton(self)
+        generate_report = GenerateReport(self)
+
+        new_meeting.pack(side='left', fill='y')
+        record_button.pack(side='left', fill='y', padx=5)
+        generate_report.pack(side='left', fill='y')
 
         self.mainloop()
 
-    def update_meeting(self, *args):
-        self.label.configure(text=self.meeting.get())
     def disable_event(self):
         pass
 

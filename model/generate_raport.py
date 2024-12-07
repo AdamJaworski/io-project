@@ -2,11 +2,12 @@ import os
 from datetime import  datetime
 from typing import Optional, List
 from controller.summary import get_meeting_shortcut, get_text_from_response
+from controller.speach_to_text import get_entire_recording_transcript
 from common.path_manager import PathManager
 from reportlab.pdfgen.canvas import Canvas
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
-
+from common import variables
 
 class Report(Canvas):
     def __init__(self,
@@ -25,11 +26,13 @@ class Report(Canvas):
         :param screenshots: List of file names in report id location. If not provided list is empty
         """
 
-        assert transcript, "Transcript Required"
+        variables.display.set('Tworzenie transkryptu...')
+        self.transcript = transcript if transcript else get_entire_recording_transcript(report_id)
 
         self.paths = PathManager(report_id)
-        self.summary = get_text_from_response(get_meeting_shortcut(transcript)) if not summary else summary
-        self.transcript = transcript
+        variables.display.set('Tworzenie podsumowania...')
+        self.summary = get_text_from_response(get_meeting_shortcut(self.transcript)) if not summary else summary
+
 
         self.header = header
         self.screenshots = screenshots if screenshots else []

@@ -3,7 +3,7 @@ from common.path_manager import PathManager
 import pydub
 from pydub.silence import split_on_silence
 from model.speach_to_text import r, SAMPLE_RATE
-
+from common import variables
 
 def process_recorded_tracks(report_id: str) -> list:
     path_manager = PathManager(report_id)
@@ -29,8 +29,7 @@ def audio_to_text(audio_data: pydub.AudioSegment):
     try:
         text = r.recognize_google(sr.AudioData(audio_data.raw_data, SAMPLE_RATE, audio_data.frame_width), language='pl-PL')
     except:
-        print('error')
-        return ' '
+        return ''
     # finally:
     #     print('playing chunk')
     #     play(audio_data)
@@ -39,7 +38,8 @@ def audio_to_text(audio_data: pydub.AudioSegment):
 def get_entire_recording_transcript(report_id: str):
     chunks = process_recorded_tracks(report_id)
     text = []
-    for chunk in chunks:
+    for index, chunk in enumerate(chunks):
+        variables.display.set(f'Tworzenie transkryptu {int(index/len(chunks))}%')
         text.append(audio_to_text(chunk))
 
     return ' '.join(text)

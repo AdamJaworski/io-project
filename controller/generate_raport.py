@@ -2,6 +2,7 @@ from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfbase import pdfmetrics
 from reportlab.lib import colors
 from model.generate_raport import Report
+from common import variables
 from typing import Optional
 
 FONT        = 'SpaceMono-Regular' #'Comfortaa'
@@ -12,6 +13,7 @@ LEADING     = 15
 TEXT_FOOTER = 70
 
 def generate_report(report_model: Report):
+    variables.display.set('Tworzenie raportu')
     # Header
     report_model.setTitle('Raport')
 
@@ -42,6 +44,7 @@ def generate_report(report_model: Report):
     write_lines_to_report(report_model, summary_lines, text, 660)
 
     report_model.save()
+    variables.display.set('Ukończono generowanie raportu')
 
 def set_new_page(report_model: Report, page_type: Optional[str] = 'text'):
     report_model.showPage()
