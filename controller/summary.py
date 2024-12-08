@@ -2,6 +2,7 @@ from model import summary
 
 def get_meeting_shortcut(input_text: str):
     context = f"Streść spotaknie z transkryptu, nie dodawaj nic od siebie, tylko streszczenie spotakania. Transkrypt:\n{input_text}"
+    #context = f"Na podstawie kontekstu wypowiedzi, postaraj się podzielić transkrypt na mówców. Jeżeli nie wiesz jak nazwać daną osobę, zazwij ją mówica 1, 2 itd. Transkrypt:\n{input_text}"
     try:
         response = summary.llm.create_chat_completion(messages=[
             {

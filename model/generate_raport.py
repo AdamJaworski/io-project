@@ -14,7 +14,7 @@ class Report(Canvas):
                  report_id: str,
                  report_name: Optional[str] = datetime.now().strftime('%d-%m-%Y %H_%M'),
                  header: Optional[str] = None,
-                 transcript: str = None,
+                 transcript: tuple = None,
                  summary: Optional[str] = None,
                  screenshots: Optional[List[str]] = None,
                  **kwds):
@@ -29,10 +29,12 @@ class Report(Canvas):
         variables.display.set('Tworzenie transkryptu...')
         self.transcript = transcript if transcript else get_entire_recording_transcript(report_id)
 
+        print(self.transcript)
+
         self.paths = PathManager(report_id)
         variables.display.set('Tworzenie podsumowania...')
-        self.summary = get_text_from_response(get_meeting_shortcut(self.transcript)) if not summary else summary
-
+        #self.summary = get_text_from_response(get_meeting_shortcut(self.transcript)) if not summary else summary
+        self.summary = ''
 
         self.header = header
         self.screenshots = screenshots if screenshots else []

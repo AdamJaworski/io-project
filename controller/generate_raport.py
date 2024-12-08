@@ -88,8 +88,8 @@ def write_lines_to_report(report_model, lines_to_write, current_text_instance, s
 
 def text_to_array(text: str):
     parts = text.split('\n')
-    new_text = ' '.join(parts)
-    parts = new_text.split(' ')
+    text = ' '.join(parts)
+    parts = text.split(' ')
     return parts
 
 def convert_text_to_lines(text_array, length_of_words_in_line = 50):
