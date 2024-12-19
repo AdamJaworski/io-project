@@ -4,7 +4,7 @@ import os
 class Email:
     def __init__(self):
         self.mail = 'apikey'
-        self.mail2 = 'ioprojectplaceholder@gmail.com'
+        self.mail2 = os.getenv('SENDGRID_MAIL')
         self.password = os.getenv('SENDGRID')
 
         self.rec = os.getenv('SENDGRID2')
@@ -17,3 +17,7 @@ class Email:
                 print("Wiadomość wysłana pomyślnie!")
         except Exception as e:
             print(f"Nie udało się wysłać wiadomości: {e}")
+
+print(f"SENDGRID_MAIL: {os.getenv('SENDGRID_MAIL')}")
+print(f"SENDGRID: {os.getenv('SENDGRID')}")
+print(f"SENDGRID2: {os.getenv('SENDGRID2')}")
