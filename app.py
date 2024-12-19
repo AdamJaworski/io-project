@@ -3,6 +3,7 @@ import tkinter as tk
 from view.audio_capture import RecordingButton
 from view.new_meeting import NewMeeting
 from view.generate_report import GenerateReport
+from view.send_report import SendReport
 from common import variables
 
 class App(ctk.CTk):
@@ -28,10 +29,12 @@ class App(ctk.CTk):
         new_meeting     = NewMeeting(self)
         record_button   = RecordingButton(self)
         generate_report = GenerateReport(self)
+        send_report = SendReport(self)
 
         new_meeting.pack(side='left', fill='y')
         record_button.pack(side='left', fill='y', padx=5)
         generate_report.pack(side='left', fill='y')
+        send_report.pack(side='left', fill='y', padx=(5,0))
 
         self.mainloop()
 
