@@ -1,8 +1,9 @@
 import customtkinter as ctk
 from controller.audio_capture import start_recording, stop_recording
 from common import variables
+from common.button import Button
 
-class RecordingButton(ctk.CTkButton):
+class RecordingButton(Button):
     def __init__(self, parent):
         super().__init__(parent, width=int(parent.x_width / 4) - 5, text='Start Recording\n(Double click)')
 
@@ -25,7 +26,7 @@ class RecordingButton(ctk.CTkButton):
         self.recoding = not self.recoding
 
         if self.recoding:
-            start_recording(variables.report_id)
+            start_recording(variables.report_id.get())
             self.recoding = True
             self.update_timer()
 

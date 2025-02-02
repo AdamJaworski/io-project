@@ -13,7 +13,7 @@ class App(ctk.CTk):
         # Geometry
         center_x = int(self.winfo_screenwidth() / 2 - int(self.winfo_screenwidth() / 1.7) / 2)
         y_offset = int(self.winfo_screenheight() / 10)
-        self.y_height = int(self.winfo_screenheight() / 12)
+        self.y_height = int(self.winfo_screenheight() / 10)
         self.x_width = int(self.winfo_screenwidth() / 4)
         self.geometry(f'{self.x_width}x{self.y_height}+{center_x}+{y_offset}')
 
@@ -22,9 +22,13 @@ class App(ctk.CTk):
         #self.protocol("WM_DELETE_WINDOW", self.disable_event)
         self.resizable(False, False)
 
-        self.display = ctk.CTkLabel(self, height=int(self.y_height / 10), text=variables.report_id)
-        self.display.pack(fill='x')
+        variables.report_id = tk.StringVar()
         variables.display = tk.StringVar()
+        self.meeting = ctk.CTkEntry(self, height=int(self.y_height / 10), textvariable=variables.report_id, placeholder_text='Metting name')
+        self.display = ctk.CTkLabel(self, height=int(self.y_height / 10), text='Current status')
+        self.meeting.pack(fill='x')
+        self.display.pack(fill='x', pady=3)
+
 
         new_meeting     = NewMeeting(self)
         record_button   = RecordingButton(self)

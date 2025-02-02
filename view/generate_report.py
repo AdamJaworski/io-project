@@ -1,11 +1,10 @@
 import threading
-import uuid
-import customtkinter as ctk
 from common import variables
 from controller.generate_raport import generate_report
 from model.generate_raport import Report
+from common.button import Button
 
-class GenerateReport(ctk.CTkButton):
+class GenerateReport(Button):
     def __init__(self, parent):
         super().__init__(parent, width=int(parent.x_width / 4) - 5, text='Stwórz raport', command=self.start_generating_report)
 
