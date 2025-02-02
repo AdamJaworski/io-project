@@ -15,9 +15,9 @@ class GenerateReport(Button):
         threading.Thread(target=self.generate_report).start()
 
     def generate_report(self):
-        variables.display.trace_add('write', self.update_progress)
-        generate_report(Report(variables.report_id))
-        variables.display.trace_add('write', self.update_progress)
+        trace_id = variables.display.trace_add('write', self.update_progress)
+        generate_report(Report(variables.report_id.get()))
+        variables.display.trace_remove('write', trace_id)
 
     def update_progress(self, *args):
         self.parent.display.configure(text=f'Tworzenie raportu: {variables.display.get()}')

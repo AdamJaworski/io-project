@@ -20,6 +20,7 @@ def send_report(report_id, to):
             report = file
             break
 
+    assert report, 'Nie znaleziono raportu, wygenerowałeś go?'
     with open(str(report_path / report), 'rb') as attachment:
         part = MIMEBase('application', 'octet-stream')
         part.set_payload(attachment.read())

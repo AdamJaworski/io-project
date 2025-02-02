@@ -24,8 +24,8 @@ class App(ctk.CTk):
 
         variables.report_id = tk.StringVar()
         variables.display = tk.StringVar()
-        self.meeting = ctk.CTkEntry(self, height=int(self.y_height / 10), textvariable=variables.report_id, placeholder_text='Metting name')
-        self.display = ctk.CTkLabel(self, height=int(self.y_height / 10), text='Current status')
+        self.meeting = ctk.CTkEntry(self, height=int(self.y_height / 10), textvariable=variables.report_id, placeholder_text='Nazwa spotkania')
+        self.display = ctk.CTkLabel(self, height=int(self.y_height / 10), text='Aktualny status')
         self.meeting.pack(fill='x')
         self.display.pack(fill='x', pady=3)
 
