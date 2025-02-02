@@ -1,6 +1,6 @@
 import smtplib
 import os
-
+from common import variables
 class Email:
     def __init__(self):
         self.mail = 'apikey'
@@ -14,9 +14,9 @@ class Email:
                 server.starttls()  # Ustawienie szyfrowania
                 server.login(self.mail, self.password)
                 server.send_message(msg)
-                print("Wiadomość wysłana pomyślnie!")
+                variables.display.set("Wiadomość wysłana pomyślnie!")
         except Exception as e:
-            print(f"Nie udało się wysłać wiadomości: {e}")
+            variables.display.set(f"Nie udało się wysłać wiadomości: {e}")
 
 print(f"SENDGRID_MAIL: {os.getenv('SENDGRID_MAIL')}")
 print(f"SENDGRID: {os.getenv('SENDGRID')}")
